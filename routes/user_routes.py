@@ -59,3 +59,22 @@ def update_user(user_id):
     login.password = data.get('password', login.password)
 
     db.session.commit()
+
+#delete endpoint
+@user_bp("/home/login/delete/<int:user_id>/", methods=["DELETE"])
+def delete_user(user_id):
+    user = Users.query.get(user_id)
+    if not user:
+        return jsonify({"error": "User not found"}), 401
+    try:
+        db.session.delete(user_id)
+        db.session.commit()
+        return jsonify({"message": "User successfully deleted"}), 201
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": str(e)}), 400
+    
+
+
+
+# Issues: this code code won't work right now due to circular import.
