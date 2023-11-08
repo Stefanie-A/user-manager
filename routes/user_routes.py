@@ -79,5 +79,4 @@ def delete_user(user_id):
     
 
 
-
-# Issues: this code code won't work right now due to circular import.
+#issue: fixed circular import issue, still making the endpoint responsive
