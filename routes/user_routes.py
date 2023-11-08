@@ -1,7 +1,9 @@
-from app import db
 from flask import request, jsonify, Blueprint
 from models.user import Users
 import re
+from database import db
+
+
 user_bp = Blueprint('user', __name__)
 
 #Signup endpoint
@@ -37,7 +39,7 @@ def sign_in():
     for users in login:
         users_login.append({
             'id': users.id,
-            'username': users.userame,
+            'username': users.username,
             'email': users.email,
             'password': users.password
         })
@@ -61,7 +63,7 @@ def update_user(user_id):
     db.session.commit()
 
 #delete endpoint
-@user_bp("/home/login/delete/<int:user_id>/", methods=["DELETE"])
+@user_bp.route("/home/login/delete/<int:user_id>/", methods=["DELETE"])
 def delete_user(user_id):
     user = Users.query.get(user_id)
     if not user:
