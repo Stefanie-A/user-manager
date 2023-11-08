@@ -29,37 +29,38 @@ def sign_up():
     db.session.add(user)
     db.session.commit()
 
-    return jsonify({"message": "User successfully created"})
+    return jsonify({"message": "User successfully created"}), 200
 
 #login endpoint
 @user_bp.route("/home/login/", methods=['GET'])
 def sign_in():
-    login = Users.query.all()
+    users = Users.query.all()
     users_login = [ ]
-    for users in login:
+    for user in users:
         users_login.append({
-            'id': users.id,
-            'username': users.username,
-            'email': users.email,
-            'password': users.password
+            'id': user.id,
+            'username': user.username,
+            'email': user.email,
+            'password': user.password
         })
-        return jsonify(users_login)
+    return jsonify(users_login)
     
 #update endpoint
-@user_bp.route("/home/login/update/<int:user_id>", methods=['PUT'])
+@user_bp.route("/home/login/update/<user_id>/", methods=['PUT'])
 def update_user(user_id):
     data = request.get_json()
-    login = Users.query.get(user_id)
+    users = Users.query.get(user_id)
 
-    if not login:
+    if not users:
         return jsonify ({
             'error': "User not found"
-        })
+        }), 401
     
-    login.username = data.get('username', login.username),
-    login.email = data.get('email', login.email),
-    login.password = data.get('password', login.password)
+    users.username = data.get('username', users.username),
+    users.email = data.get('email', users.email),
+    users.password = data.get('password', users.password)
 
+    db.session.add(users)
     db.session.commit()
 
 #delete endpoint
