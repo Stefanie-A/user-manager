@@ -1,5 +1,5 @@
 from flask import request, jsonify, Blueprint
-from models.user import Users
+from models.user import User
 import re
 from database import db
 
@@ -7,8 +7,8 @@ from database import db
 user_bp = Blueprint('user', __name__)
 
 #Signup endpoint
-@user_bp.route("/home/sign-up/", methods=['POST'])
-def sign_up():
+@user_bp.route("/create-user/", methods=['POST'])
+def create_user():
     data = request.get_json()
     username = data.get('username')
     email = data.get('email')
@@ -20,7 +20,7 @@ def sign_up():
     if username is None and email is None or (match != email) and password is None:
         return jsonify({"message": "Please fill in required fields and enter a valid email format"})
     
-    user = Users(
+    user = User(
         username = username,
         email = email,
         password = password
@@ -32,9 +32,9 @@ def sign_up():
     return jsonify({"message": "User successfully created"}), 200
 
 #login endpoint
-@user_bp.route("/home/login/", methods=['GET'])
-def sign_in():
-    users = Users.query.all()
+@user_bp.route("/login-user/", methods=['GET'])
+def login_user():
+    users = User.query.all()
     users_login = [ ]
     for user in users:
         users_login.append({
@@ -46,10 +46,10 @@ def sign_in():
     return jsonify(users_login)
     
 #update endpoint
-@user_bp.route("/home/login/update/<user_id>/", methods=['PUT'])
+@user_bp.route("/update-user/<user_id>/", methods=['PUT'])
 def update_user(user_id):
     data = request.get_json()
-    users = Users.query.get(user_id)
+    users = User.query.get(user_id)
 
     if not users:
         return jsonify ({
@@ -64,9 +64,9 @@ def update_user(user_id):
     db.session.commit()
 
 #delete endpoint
-@user_bp.route("/home/login/delete/<int:user_id>/", methods=["DELETE"])
+@user_bp.route("/delete-user/<int:user_id>/", methods=["DELETE"])
 def delete_user(user_id):
-    user = Users.query.get(user_id)
+    user = User.query.get(user_id)
     if not user:
         return jsonify({"error": "User not found"}), 401
     try:
@@ -77,6 +77,3 @@ def delete_user(user_id):
         db.session.rollback()
         return jsonify({"error": str(e)}), 400
     
-
-
-#issue: fixed circular import issue, still making the endpoint responsive

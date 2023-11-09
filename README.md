@@ -1,6 +1,6 @@
 #User Management App
 
-A Python-based user management application that simplifies user registration, regex for email format validation and backsup users in the database.
+A flask api that allows us to create, fetch, update and delete users in an SQLite database.
 
 ## Table of Contents
 
