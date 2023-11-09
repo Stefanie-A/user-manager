@@ -18,7 +18,7 @@ def create_user():
     match = re.match(pattern, email)
 
     if username is None and email is None or (match != email) and password is None:
-        return jsonify({"message": "Please fill in required fields and enter a valid email format"})
+        return jsonify({"message": "Please fill in required fields and enter a valid email format"}), 401
     
     user = User(
         username = username,
@@ -46,33 +46,34 @@ def login_user():
     return jsonify(users_login)
     
 #update endpoint
-@user_bp.route("/update-user/<user_id>/", methods=['PUT'])
+@user_bp.route("/update-user/<int:user_id>/", methods=['PUT'])
 def update_user(user_id):
     data = request.get_json()
-    users = User.query.get(user_id)
+    user = User.query.get(user_id)
 
-    if not users:
+    if not user:
         return jsonify ({
             'error': "User not found"
-        }), 401
+        }), 404
     
-    users.username = data.get('username', users.username),
-    users.email = data.get('email', users.email),
-    users.password = data.get('password', users.password)
+    user.username = data.get('username', user.username)
+    user.email = data.get('email', user.email)
+    user.password = data.get('password', user.password)
 
-    db.session.add(users)
     db.session.commit()
+
+    return jsonify({"message": "User successfully updated"}), 200
 
 #delete endpoint
 @user_bp.route("/delete-user/<int:user_id>/", methods=["DELETE"])
 def delete_user(user_id):
     user = User.query.get(user_id)
     if not user:
-        return jsonify({"error": "User not found"}), 401
+        return jsonify({"error": "User not found"}), 404
     try:
-        db.session.delete(user_id)
+        db.session.delete(user)
         db.session.commit()
-        return jsonify({"message": "User successfully deleted"}), 201
+        return jsonify({"message": "User successfully deleted"}), 204
     except Exception as e:
         db.session.rollback()
         return jsonify({"error": str(e)}), 400

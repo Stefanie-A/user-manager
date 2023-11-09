@@ -14,4 +14,5 @@ A flask api that allows us to create, fetch, update and delete users in an SQLit
 2. cd user-management-app
 3. pip install -r requirements.txt
 
+## Contact
 For questions or assistance, please contact me at albertstephanie630@gmail.com
