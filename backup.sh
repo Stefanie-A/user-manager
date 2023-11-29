@@ -1,4 +1,4 @@
 
 #!/usr/bin/bash
 
-rsync -v database.py database_backup.py
+rsync -v database.db database_backup.db
