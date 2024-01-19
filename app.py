@@ -9,7 +9,7 @@ db.init_app(app)
 migrate = Migrate(app, db)
 
 
-@app.route("/home")
+@app.route("/")
 def home():
     return "Welcome"
 
