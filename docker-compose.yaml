@@ -1,0 +1,19 @@
+version: "2"
+services:
+  user-manager:
+    build: .
+    container_name: my-appC
+    volumes: 
+      - .:/app
+    tty: true
+    restart: always
+  
+  nginx: 
+    image: nginx
+    container_name: nginx
+    ports: 
+      - "8080:80"
+    volumes: 
+      - ./nginx/conf.d/default.conf:/etc/nginx/conf.d/default.conf
+    tty: true
+    restart: always

@@ -11,7 +11,7 @@ migrate = Migrate(app, db)
 
 @app.route("/")
 def home():
-    return jsonify ({"message": "Welcome"})
+    return jsonify ({"message": "Hello world"})
 
 app.register_blueprint(user_bp)
 if __name__ == "__main__":
