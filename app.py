@@ -1,5 +1,5 @@
 from routes.user_routes import user_bp
-from flask import Flask
+from flask import Flask, jsonify
 from database import db
 from flask_migrate import Migrate
 
@@ -11,7 +11,7 @@ migrate = Migrate(app, db)
 
 @app.route("/")
 def home():
-    return "Welcome"
+    return jsonify ({"message": "Welcome"})
 
 app.register_blueprint(user_bp)
 if __name__ == "__main__":
